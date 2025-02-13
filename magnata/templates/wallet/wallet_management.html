@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Carteira - {{ wallet.name }}{% endblock %}
+
+{% block content %}
+<main>
+    <section class="wallet-details">
+        <h2>{{ wallet.name }}</h2>
+        <p>{{ wallet.description }}</p>
+        
+        <div class="stocks-list">
+            <h3>Ações na Carteira</h3>
+            <form action="{% url 'buy_stock' %}" method="get">
+                <input type="hidden" name="wallet_id" value="{{ wallet.id }}">
+                <button type="submit">Adicionar Nova Ação</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ação</th>
+                        <th>Quantidade</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <td>{{ stock.stock.name }} ({{ stock.stock.ticker }})</td>
+                        <td>{{ stock.total }}</td>
+                        <td>
+                            <button onclick="openSellModal('{{ stock.id }}', '{{ stock.stock.name }}', {{ stock.total }})" class="btn-sell">
+                                Vender
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Modal de Venda -->
+    <div id="sellModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Vender Ação</h3>
+            <form action="{% url 'sell_stock' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="stockInWalletId" name="stock_in_wallet_id">
+                <input type="hidden" name="wallet_id" value="{{ wallet.id }}">
+                
+                <div class="form-group">
+                    <label for="stockName">Ação:</label>
+                    <span id="stockName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantidade:</label>
+                    <input type="number" id="quantity" name="quantity" required min="1">
+                    <span id="maxQuantity"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Preço de Venda:</label>
+                    <input type="number" id="price" name="price" required min="0.01" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Data da Venda:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <button type="submit">Confirmar Venda</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+function openSellModal(stockId, stockName, maxQuantity) {
+    const modal = document.getElementById('sellModal');
+    const stockNameSpan = document.getElementById('stockName');
+    const maxQuantitySpan = document.getElementById('maxQuantity');
+    const quantityInput = document.getElementById('quantity');
+    const stockInWalletIdInput = document.getElementById('stockInWalletId');
+    
+    modal.style.display = "block";
+    stockNameSpan.textContent = stockName;
+    maxQuantitySpan.textContent = `Máximo: ${maxQuantity}`;
+    quantityInput.max = maxQuantity;
+    stockInWalletIdInput.value = stockId;
+
+    // Set today as max date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').max = today;
+}
+
+// Close modal
+document.getElementsByClassName('close')[0].onclick = function() {
+    document.getElementById('sellModal').style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('sellModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.stocks-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.stocks-list th, .stocks-list td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.btn-sell {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-sell:hover {
+    background-color: #bb2d3b;
+}
+</style>
+{% endblock %}
