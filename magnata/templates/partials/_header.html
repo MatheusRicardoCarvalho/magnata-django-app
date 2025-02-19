@@ -1,0 +1,20 @@
+<header class="main-header">
+    <div class="header-container">
+        <div class="logo">
+            <a href="{% url 'home' %}">Finanças</a>
+        </div>
+        <nav class="nav-menu">
+            {% if user.is_authenticated %}
+                <span class="username">{{ user.username }}</span>
+                
+                <a href="{% url 'create_wallet' %}" class="nav-link">Nova Carteira</a>
+                <a href="{% url 'add_stock' %}" class="nav-link">Nova Ação</a>
+                
+                <a href="{% url 'logout' %}" class="nav-link logout">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link">Login</a>
+                <a href="{% url 'register' %}" class="nav-link">Registro</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>

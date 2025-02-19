@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Nova Carteira{% endblock %}
+
+{% block content %}
+<main>
+
+    <div class="form-container">
+        <h1>Add New Wallet</h1>
+
+        <form method="POST" action="{% url 'create_wallet' %}">
+            {% csrf_token %}
+
+            <!-- User Field (hidden) -->
+            <input type="hidden" name="user" value="{{ user.id }}">
+
+            <!-- Wallet Name -->
+            <label for="name">Wallet Name</label>
+            <input type="text" id="name" name="name" required maxlength="100" placeholder="Enter wallet name"
+                value="{{ form.name.value|default:'' }}">
+
+            <label for="type">Wallet Type</label>
+            <select name="type" id="type">
+                {% for choice in WalletType %}
+                <option value="{{ choice.value }}">{{ choice.label }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Wallet Description -->
+            <label for="description">Description</label>
+            <textarea id="description" name="description"
+                placeholder="Enter wallet description">{{ form.description.value|default:'' }}</textarea>
+
+            <!-- Submit Button -->
+            <button type="submit">Add Wallet</button>
+        </form>
+
+    </div>
+
+</main>
+{% endblock %}

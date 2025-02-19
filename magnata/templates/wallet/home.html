@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Finanças{% endblock %}
+
+{% block content %}
+<main>
+    <section class="wallet-list">
+        <h2>Carteiras Existentes</h2>
+        <ul>
+            {% for wallet in wallets %}
+            <li>
+                <div>
+                    <a href="{% url 'wallet_management' %}?wallet_id={{ wallet.id }}" class="btn-wallet">{{ wallet.name }}</a>
+                    <p class="wallet-desc">{{ wallet.description }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'create_wallet' %}">Criar Nova Carteira</a>
+        {% if user.is_superuser %}
+        <a href="{% url 'add_stock' %}">Adicionar Nova Ação</a>  <!-- Adicione esta linha -->
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

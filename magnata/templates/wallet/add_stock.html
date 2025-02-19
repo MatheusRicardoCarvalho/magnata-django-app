@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Adicionar Ação{% endblock %}
+
+{% block content %}
+<main>
+    <section class="add-stock-form">
+        <form action="{% url 'add_stock' %}" method="POST">
+            {% csrf_token %}
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="ticker">Ticker:</label>
+            <input type="text" id="ticker" name="ticker" required>
+
+            <label for="classification">Classificação:</label>
+            <select id="classification" name="classification">
+                <option value="">Selecione uma classificação existente</option>
+                {% for classification in classifications %}
+                <option value="{{ classification.id }}">{{ classification.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" id="new_classification" name="new_classification" placeholder="Ou insira uma nova classificação">
+
+            <label for="sector">Setor:</label>
+            <select id="sector" name="sector">
+                <option value="">Selecione um setor existente</option>
+                {% for sector in sectors %}
+                <option value="{{ sector.id }}">{{ sector.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" id="new_sector" name="new_sector" placeholder="Ou insira um novo setor">
+
+            <button type="submit">Adicionar Ação</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

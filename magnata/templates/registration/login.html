@@ -1,0 +1,26 @@
+<!-- filepath: /c:/Users/Matheus/Desktop/IF docs/django/magnata/templates/registration/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+    </header>
+    <main>
+        <section class="form-section">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
+            <p>Não tem uma conta? <a href="{% url 'register' %}">Registre-se</a></p>
+        </section>
+    </main>
+</body>
+</html>
