@@ -12,13 +12,19 @@
                 <div>
                     <a href="{% url 'wallet_management' %}?wallet_id={{ wallet.id }}" class="btn-wallet">{{ wallet.name }}</a>
                     <p class="wallet-desc">{{ wallet.description }}</p>
+                    <p class="wallet-type">Tipo: {{ wallet.get_type_display }}</p>
+                    <form method="POST" action="{% url 'delete_wallet' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="wallet_id" value="{{ wallet.id }}">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Tem certeza que deseja excluir esta carteira?')">Excluir Carteira</button>
+                    </form>
                 </div>
             </li>
             {% endfor %}
         </ul>
         <a href="{% url 'create_wallet' %}">Criar Nova Carteira</a>
         {% if user.is_superuser %}
-        <a href="{% url 'add_stock' %}">Adicionar Nova Ação</a>  <!-- Adicione esta linha -->
+        <a href="{% url 'add_stock' %}">Adicionar Nova Ação</a>
         {% endif %}
     </section>
 </main>
