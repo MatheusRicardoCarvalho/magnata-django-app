@@ -12,5 +12,6 @@ urlpatterns = [
         path('', views.home, name='home'), 
         path('wallet/add_stock', views.add_stock, name='add_stock'),
         path('wallet/sell_stock', views.sell_stock, name='sell_stock'),
+        path('wallet/delete_wallet', views.delete_wallet, name='delete_wallet'),
 
 ]

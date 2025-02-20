@@ -5,7 +5,8 @@
 {% block content %}
 <main>
     <section class="wallet-details">
-        <h2>{{ wallet.name }}</h2>
+        <h1>{{ wallet.name }}</h1>
+        <p>Tipo: {{ wallet.get_type_display }}</p>
         <p>{{ wallet.description }}</p>
         
         <div class="stocks-list">
